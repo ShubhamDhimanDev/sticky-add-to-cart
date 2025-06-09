@@ -1,0 +1,28 @@
+name = "Sticky Cart Extension"
+client_id = "378aa51c41764bc650dacadca3d542bc"
+application_url = "https://shopifycart.insanedev.in/"
+embedded = true
+handle = "sticky-cart-ext"
+
+[access_scopes]
+scopes = "read_products,write_products,write_script_tags"
+
+[access.admin]
+direct_api_mode = "online"
+
+[auth]
+redirect_urls = [
+  "https://shopifycart.insanedev.in/authenticate"
+]
+
+[webhooks]
+api_version = "2024-01"
+
+[[webhooks.subscriptions]]
+topics = [ "app/uninstalled" ]
+compliance_topics = [ "customers/redact", "customers/data_request", "shop/redact" ]
+uri = "/webhooks"
+
+[build]
+automatically_update_urls_on_dev = false
+include_config_on_deploy = true
