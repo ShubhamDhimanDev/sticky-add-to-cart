@@ -1,0 +1,115 @@
+.productView-stickyCart {
+    display: none !important;
+}
+
+.sticky-add-to-cart-v1 {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    background-color: var(--color-background-1);
+    box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    z-index: 999;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.sticky-add-to-cart-v1.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.display-none {
+    display: none;
+}
+
+.sticky-add-to-cart-v1 .product-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.sticky-add-to-cart-v1 .product-info .title {
+    margin: 0;
+    font-size: 1.6rem;
+    color: var(--color-text-1);
+}
+
+.sticky-add-to-cart-v1 .product-info .price {
+    margin: 0.15rem 0 0;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: baseline;
+}
+
+.sticky-add-to-cart-v1 .product-info .price .compare-at {
+    text-decoration: line-through;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    font-size: 1.6rem;
+}
+
+.sticky-add-to-cart-v1 .product-info .price .current-price {
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.sticky-add-to-cart-v1 .controls {
+    display: flex;
+    align-items: center;
+}
+
+.sticky-add-to-cart-v1 .qty-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #cccccc;
+    overflow: hidden;
+    margin-right: 1rem;
+    background-color: #f9f9f9;
+    padding: .55rem;
+}
+
+.sticky-add-to-cart-v1 .qty-selector button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: transparent;
+    border: none;
+    font-size: 2.2rem;
+    color: #333333;
+    cursor: pointer;
+}
+
+.sticky-add-to-cart-v1 .qty-selector input[type="number"] {
+    width: 40px;
+    height: 32px;
+    border: none;
+    text-align: right;
+    font-size: 1.6rem;
+    outline: none;
+    background-color: transparent;
+    -moz-appearance: textfield;
+}
+
+.sticky-add-to-cart-v1 .qty-selector input[type="number"]::-webkit-outer-spin-button,
+.sticky-add-to-cart-v1 .qty-selector input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.sticky-add-to-cart-v1 .add-to-cart-btn {
+    padding: 1.25rem 2.4rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.5s ease, background-color 0.5s ease, border 0.5s ease;
+}
