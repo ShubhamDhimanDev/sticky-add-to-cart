@@ -41,3 +41,19 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface CartSettingsData {
+    cart_bg_color: string;
+    cart_text_color: string;
+    cart_price_text_color: string;
+    btn_bg_color: string;
+    btn_text_color: string;
+    btn_onhover_bg_color: string;
+    btn_onhover_text_color: string;
+};
+
+export type CartProps = {
+    cartSettings: {
+        data: CartSettingsData;
+    };
+};

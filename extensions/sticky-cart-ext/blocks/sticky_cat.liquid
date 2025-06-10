@@ -1,273 +1,273 @@
 {% schema %}
 {
-  "name": "Sticky ATC",
-  "target": "section",
-  "settings": []
+    "name": "Sticky ATC",
+    "target": "section",
+    "settings": []
 }
 {% endschema %}
 
 <style>
-    .productView-stickyCart {
-      display: none !important;
-    }
+      .productView-stickyCart {
+        display: none !important;
+      }
 
-    .custom-hello-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: var(--color-background-1, {{ shop.metafields.customization.cart_bg_color }});
-      box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.25rem 1.5rem;
-      z-index: 999;
-      opacity: 0;
+      .custom-hello-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: var(--color-background-1, {{ shop.metafields.customization.cart_bg_color }});
+        box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        z-index: 999;
+        opacity: 0;
         transform: translateY(100%);
         transition: opacity 0.5s ease, transform 0.5s ease;
-    }
+      }
 
     .custom-hello-bar.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-    .display-none {
-      display:none;
+        opacity: 1;
+        transform: translateY(0);
     }
 
-    .custom-hello-bar .product-info {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-    .custom-hello-bar .product-info .title {
-      margin: 0;
-      font-size: 1.6rem;
-      color: var(--color-text-1, {{ shop.metafields.customization.cart_text_color }});
-    }
-    .custom-hello-bar .product-info .price {
-      margin: 0.15rem 0 0;
-      font-size: 1.6rem;
-      display: flex;
-      align-items: baseline;
-    }
-    .custom-hello-bar .product-info .price .compare-at {
-      text-decoration: line-through;
-      font-weight: 600;
-      margin-right: 0.5rem;
-      font-size: 1.6rem;
-    }
-    .custom-hello-bar .product-info .price .current-price {
-      color: {{ shop.metafields.customization.cart_price_text_color }};
-      font-weight: 600;
-      font-size: 1.6rem;
-    }
+      .display-none {
+        display:none;
+      }
 
-    .custom-hello-bar .controls {
-      display: flex;
-      align-items: center;
-    }
+      .custom-hello-bar .product-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+      }
+      .custom-hello-bar .product-info .title {
+        margin: 0;
+        font-size: 1.6rem;
+        color: var(--color-text-1, {{ shop.metafields.customization.cart_text_color }});
+      }
+      .custom-hello-bar .product-info .price {
+        margin: 0.15rem 0 0;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: baseline;
+      }
+      .custom-hello-bar .product-info .price .compare-at {
+        color: {{ shop.metafields.customization.cart_text_color }};
+        text-decoration: line-through;
+        font-weight: 600;
+        margin-right: 0.5rem;
+        font-size: 1.6rem;
+      }
+      .custom-hello-bar .product-info .price .current-price {
+        color: {{ shop.metafields.customization.cart_price_text_color }};
+        font-weight: 600;
+        font-size: 1.6rem;
+      }
 
-    .custom-hello-bar .qty-selector {
-      display: flex;
-      align-items: center;
-      border: 1px solid #cccccc;
-      overflow: hidden;
-      margin-right: 1rem;
-      background-color: #f9f9f9;
-      padding: .55rem;
-    }
-    .custom-hello-bar .qty-selector button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      background-color: transparent;
-      border: none;
-      font-size: 2.2rem;
-      color: #333333;
-      cursor: pointer;
-    }
-    .custom-hello-bar .qty-selector input[type="number"] {
-      width: 40px;
-      height: 32px;
-      border: none;
-      text-align: right;
-      font-size: 1.6rem;
-      outline: none;
-      background-color: transparent;
-      -moz-appearance: textfield;
-    }
-    .custom-hello-bar .qty-selector input[type="number"]::-webkit-outer-spin-button,
-    .custom-hello-bar .qty-selector input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+      .custom-hello-bar .controls {
+        display: flex;
+        align-items: center;
+      }
 
-    .custom-hello-bar .add-to-cart-btn {
-      background-color: {{ shop.metafields.customization.btn_bg_color }};
-      color: {{ shop.metafields.customization.btn_text_color }};
-      padding: 1.25rem 2.4rem;
-      font-size: 1.6rem;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      border: 1px solid {{ shop.metafields.customization.btn_bg_color }};
-      transition: color 0.5s ease, background-color 0.5s ease, border 0.5s ease;
-    }
-    .custom-hello-bar .add-to-cart-btn:hover {
-      color: {{ shop.metafields.customization.btn_onhover_text_color }};
-      background-color: {{ shop.metafields.customization.btn_onhover_bg_color }};
-      border: 1px solid {{ shop.metafields.customization.btn_onhover_bg_color }};
-    }
+      .custom-hello-bar .qty-selector {
+        display: flex;
+        align-items: center;
+        border: 1px solid #cccccc;
+        overflow: hidden;
+        margin-right: 1rem;
+        background-color: #f9f9f9;
+        padding: .55rem;
+      }
+      .custom-hello-bar .qty-selector button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background-color: transparent;
+        border: none;
+        font-size: 2.2rem;
+        color: #333333;
+        cursor: pointer;
+      }
+      .custom-hello-bar .qty-selector input[type="number"] {
+        width: 40px;
+        height: 32px;
+        border: none;
+        text-align: right;
+        font-size: 1.6rem;
+        outline: none;
+        background-color: transparent;
+        -moz-appearance: textfield;
+      }
+      .custom-hello-bar .qty-selector input[type="number"]::-webkit-outer-spin-button,
+      .custom-hello-bar .qty-selector input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      .custom-hello-bar .add-to-cart-btn {
+        background-color: {{ shop.metafields.customization.btn_bg_color }};
+        color: {{ shop.metafields.customization.btn_text_color }};
+        padding: 1.25rem 2.4rem;
+        font-size: 1.6rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        border: 1px solid {{ shop.metafields.customization.btn_bg_color }};
+        transition: color 0.5s ease, background-color 0.5s ease, border 0.5s ease;
+      }
+      .custom-hello-bar .add-to-cart-btn:hover {
+        color: {{ shop.metafields.customization.btn_onhover_text_color }};
+        background-color: {{ shop.metafields.customization.btn_onhover_bg_color }};
+      }
 </style>
 
-<div class="custom-hello-bar">
-  <div class="product-info">
-    {% if product.featured_image %}
-      <img
-        src="{{ product.featured_image | image_url: width: 50, height : 50 }}"
-        alt="{{ product.featured_image.alt | default: product.title }}"
-        class="product-image"
-        style="margin-right: 20px;"
-        width="50"
-        height="50"
-      >
-    {% else %}
-      <img
-        src="https://placehold.co/200x200?text=No+Image"
-        style="margin-right: 20px;"
-        width="50"
-        height="50"
-        alt="No Image Available"
-      >
-    {% endif %}
-    <div>
-      <p class="title">{{ product.title }}</p>
-      {% assign variant = product.selected_or_first_available_variant %}
-      <p class="price">
-        {% if variant.compare_at_price > variant.price %}
-          <span class="compare-at">
-            {{ variant.compare_at_price | money }}
-          </span>
+<div class='custom-hello-bar'>
+    <div class='product-info'>
+        {% if product.featured_image %}
+            <img
+                src='{{ product.featured_image | image_url: width: 50, height : 50 }}'
+                alt='{{ product.featured_image.alt | default: product.title }}'
+                class='product-image'
+                style='margin-right: 20px;'
+                width='50'
+                height='50'
+            >
+        {% else %}
+            <img
+                src='https://placehold.co/200x200?text=No+Image'
+                style='margin-right: 20px;'
+                width='50'
+                height='50'
+                alt='No Image Available'
+            >
         {% endif %}
-        <span class="current-price">
-          {{ variant.price | money }}
-        </span>
-      </p>
-    </div>
-  </div>
-
-  <div class="controls">
-    <!-- QUANTITY SELECTOR -->
-    <div class="qty-selector">
-      <button type="button" class="qty-decrement" aria-label="Decrease quantity">−</button>
-      <input
-        type="number"
-        name="quantity"
-        value="1"
-        min="1"
-        aria-label="Quantity"
-      >
-      <button type="button" class="qty-increment" aria-label="Increase quantity">+</button>
+        <div>
+            <p class='title'>{{ product.title }}</p>
+            {% assign variant = product.selected_or_first_available_variant %}
+            <p class='price'>
+                {% if variant.compare_at_price > variant.price %}
+                    <span class='compare-at'>
+                        {{ variant.compare_at_price | money }}
+                    </span>
+                {% endif %}
+                <span class='current-price'>
+                    {{ variant.price | money }}
+                </span>
+            </p>
+        </div>
     </div>
 
-    <!-- ADD TO CART FORM -->
-    <form action="/cart/add" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="id" value="{{ variant.id }}">
-      <input type="hidden" name="quantity" class="qty-input-hidden" value="1">
-      <button type="submit" class="add-to-cart-btn">ADD TO CART</button>
-    </form>
-  </div>
+    <div class='controls'>
+        <!-- QUANTITY SELECTOR -->
+        <div class='qty-selector'>
+            <button type='button' class='qty-decrement' aria-label='Decrease quantity'>−</button>
+            <input
+                type='number'
+                name='quantity'
+                value='1'
+                min='1'
+                aria-label='Quantity'
+            >
+            <button type='button' class='qty-increment' aria-label='Increase quantity'>+</button>
+        </div>
+
+        <!-- ADD TO CART FORM -->
+        <form action='/cart/add' method='post' enctype='multipart/form-data'>
+            <input type='hidden' name='id' value='{{ variant.id }}'>
+            <input type='hidden' name='quantity' class='qty-input-hidden' value='1'>
+            <button type='submit' class='add-to-cart-btn'>ADD TO CART</button>
+        </form>
+    </div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const bar = document.querySelector('.custom-hello-bar');
-    if (!bar) return;
+    document.addEventListener('DOMContentLoaded', function () {
+        const bar = document.querySelector('.custom-hello-bar');
+        if (!bar) return;
 
-    const decrementBtn = bar.querySelector('.qty-decrement');
-    const incrementBtn = bar.querySelector('.qty-increment');
-    const qtyInput = bar.querySelector('.qty-selector input[type="number"]');
-    const hiddenQty = bar.querySelector('.qty-input-hidden');
+        const decrementBtn = bar.querySelector('.qty-decrement');
+        const incrementBtn = bar.querySelector('.qty-increment');
+        const qtyInput = bar.querySelector('.qty-selector input[type="number"]');
+        const hiddenQty = bar.querySelector('.qty-input-hidden');
 
-    function sanitizeQty() {
-      let val = parseInt(qtyInput.value, 10);
-      if (isNaN(val) || val < 1) {
-        val = 1;
-      }
-      qtyInput.value = val;
-      hiddenQty.value = val;
-    }
+        function sanitizeQty() {
+            let val = parseInt(qtyInput.value, 10);
+            if (isNaN(val) || val < 1) {
+                val = 1;
+            }
+            qtyInput.value = val;
+            hiddenQty.value = val;
+        }
 
-    decrementBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      let current = parseInt(qtyInput.value, 10) || 1;
-      if (current > 1) {
-        qtyInput.value = current - 1;
-        hiddenQty.value = current - 1;
-      }
-    });
-
-    incrementBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      let current = parseInt(qtyInput.value, 10) || 1;
-      qtyInput.value = current + 1;
-      hiddenQty.value = current + 1;
-    });
-
-    qtyInput.addEventListener('change', sanitizeQty);
-    qtyInput.addEventListener('blur', sanitizeQty);
-
-    const stickyBar = document.querySelector('.custom-hello-bar');
-    if (!stickyBar) return;
-
-    const originalAddToCart = document.querySelector('form[action="/cart/add"] button[type="submit"]');
-
-    if (!originalAddToCart) {
-      console.warn('Sticky bar: could not locate original Add To Cart button. Adjust the selector.');
-      return;
-    }
-
-    let buttonInView = true;
-    let atBottomOfPage = false;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          buttonInView = entry.isIntersecting;
-          updateStickyBarVisibility();
+        decrementBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            let current = parseInt(qtyInput.value, 10) || 1;
+            if (current > 1) {
+                qtyInput.value = current - 1;
+                hiddenQty.value = current - 1;
+            }
         });
-      },
-      {
-        root: null,
-        threshold: 0,
-      }
-    );
-    observer.observe(originalAddToCart);
 
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY || window.pageYOffset;
-      const viewportHeight = window.innerHeight;
-      const fullHeight = document.documentElement.scrollHeight;
+        incrementBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            let current = parseInt(qtyInput.value, 10) || 1;
+            qtyInput.value = current + 1;
+            hiddenQty.value = current + 1;
+        });
 
-      if (scrollY + viewportHeight >= fullHeight - 1) {
-        atBottomOfPage = true;
-      } else {
-        atBottomOfPage = false;
-      }
-      updateStickyBarVisibility();
+        qtyInput.addEventListener('change', sanitizeQty);
+        qtyInput.addEventListener('blur', sanitizeQty);
+
+        const stickyBar = document.querySelector('.custom-hello-bar');
+        if (!stickyBar) return;
+
+        const originalAddToCart = document.querySelector('form[action="/cart/add"] button[type="submit"]');
+
+        if (!originalAddToCart) {
+            console.warn('Sticky bar: could not locate original Add To Cart button. Adjust the selector.');
+            return;
+        }
+
+        let buttonInView = true;
+        let atBottomOfPage = false;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    buttonInView = entry.isIntersecting;
+                    updateStickyBarVisibility();
+                });
+            },
+            {
+                root: null,
+                threshold: 0,
+            }
+        );
+        observer.observe(originalAddToCart);
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY || window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+            const fullHeight = document.documentElement.scrollHeight;
+
+            if (scrollY + viewportHeight >= fullHeight - 1) {
+                atBottomOfPage = true;
+            } else {
+                atBottomOfPage = false;
+            }
+            updateStickyBarVisibility();
+        });
+
+        function updateStickyBarVisibility() {
+            if (!buttonInView && !atBottomOfPage) {
+                stickyBar.classList.add('visible');
+            } else {
+                stickyBar.classList.remove('visible');
+            }
+        }
     });
-
-    function updateStickyBarVisibility() {
-      if (!buttonInView && !atBottomOfPage) {
-        stickyBar.classList.add('visible');
-      } else {
-        stickyBar.classList.remove('visible');
-      }
-    }
-  });
 </script>

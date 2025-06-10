@@ -7,7 +7,7 @@ import { createRoot } from 'react-dom/client';
 import createApp from '@shopify/app-bridge';
 import { getSessionToken } from '@shopify/app-bridge/utilities';
 import axios, { AxiosHeaders } from 'axios';
-import { AppProvider, Frame, Navigation } from '@shopify/polaris';
+import { AppProvider, Frame } from '@shopify/polaris';
 
 const params = new URLSearchParams(window.location.search);
 const host = params.get('host')!;

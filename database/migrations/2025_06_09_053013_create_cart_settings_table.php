@@ -13,7 +13,17 @@ return new class extends Migration
     {
         Schema::create('cart_settings', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('cart_bg_color')->default('#ffffff');
+            $table->string('cart_text_color')->default('#000000');
+            $table->string('cart_price_text_color')->default('#ff0000');
+            $table->string('btn_bg_color')->default('#000000');
+            $table->string('btn_text_color')->default('#ffffff');
+            $table->string('btn_onhover_bg_color')->default('#ffffff');
+            $table->string('btn_onhover_text_color')->default('#000000');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

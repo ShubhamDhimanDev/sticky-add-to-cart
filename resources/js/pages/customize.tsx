@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import {
     Page,
     Card,
@@ -8,20 +8,23 @@ import {
     Modal,
     TextContainer,
 } from '@shopify/polaris';
+import { CartProps } from '@/types';
 
 export default function Customize() {
     const [isHover, setIsHover] = React.useState(false);
     const [modalOpen, setModalOpen] = React.useState(false);
     const [serverResponse, setServerResponse] = React.useState<any>(null);
+    const { cartSettings } = usePage<CartProps>().props;
+    const cartData = cartSettings.data;
 
     const form = useForm({
-        cart_bg_color: '#ffffff',
-        cart_text_color: '#000000',
-        cart_price_text_color: '#333333',
-        btn_bg_color: '#008060',
-        btn_text_color: '#ffffff',
-        btn_onhover_bg_color: '#00664d',
-        btn_onhover_text_color: '#ffffff',
+        cart_bg_color: cartData.cart_bg_color,
+        cart_text_color: cartData.cart_text_color,
+        cart_price_text_color: cartData.cart_price_text_color,
+        btn_bg_color: cartData.btn_bg_color,
+        btn_text_color: cartData.btn_text_color,
+        btn_onhover_bg_color: cartData.btn_onhover_bg_color,
+        btn_onhover_text_color: cartData.btn_onhover_text_color,
     });
 
     const handleSubmit = React.useCallback((e: React.FormEvent) => {
@@ -57,8 +60,8 @@ export default function Customize() {
     const baseButtonStyles: React.CSSProperties = {
         backgroundColor: form.data.btn_bg_color,
         color: form.data.btn_text_color,
+        border: '1px solid ' + form.data.btn_bg_color,
         padding: '0.8rem 1.5rem',
-        border: 'none',
         fontWeight: 600,
         cursor: 'pointer',
         transition: 'background-color 0.3s ease, color 0.3s ease',
@@ -160,8 +163,8 @@ export default function Customize() {
                         <div>
                             <strong>Sample Product</strong>
                             <div>
-                                <span style={{ textDecoration: 'line-through' }}>$120.00</span>
-                                <span style={{ marginRight: '0.5rem', color: form.data.cart_price_text_color }}> $99.00</span>
+                                <span style={{ textDecoration: 'line-through', fontWeight: 600 }}>$120.00</span>
+                                <span style={{ marginRight: '0.5rem', fontWeight: 600, color: form.data.cart_price_text_color }}> $99.00</span>
                             </div>
                         </div>
                         <button
