@@ -1,11 +1,16 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
+use Osiset\ShopifyApp\Http\Middleware\VerifyShopify;
+
+Route::withoutMiddleware([VerifyShopify::class])->controller(TestController::class)->group(function(){
+    Route::get('/test', 'test');
+});
 
 Route::middleware(['verify.shopify'])->controller(CartController::class)->group(function(){
     Route::get('/', 'home')->name('home');
-    Route::get('/test', 'test')->name('test');
     Route::match(['get', 'post'], '/customize', 'customize')->name('customize');
 });
 

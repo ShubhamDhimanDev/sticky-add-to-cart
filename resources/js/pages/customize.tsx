@@ -1,199 +1,348 @@
-import React from 'react';
-import { useForm, usePage } from '@inertiajs/react';
+import React, {useCallback, useState} from 'react';
+import {useForm, usePage} from '@inertiajs/react';
 import {
-    Page,
-    Card,
-    FormLayout,
-    Button,
-    Modal,
-    TextContainer,
+  Page,
+  Card,
+  FormLayout,
+  Button,
+  Modal,
+  Tabs,
+  Text,
+  Divider,
+  TextField,
 } from '@shopify/polaris';
-import { CartProps } from '@/types';
+import {CartProps} from '@/types';
 
 export default function Customize() {
-    const [isHover, setIsHover] = React.useState(false);
-    const [modalOpen, setModalOpen] = React.useState(false);
-    const [serverResponse, setServerResponse] = React.useState<any>(null);
-    const { cartSettings } = usePage<CartProps>().props;
-    const cartData = cartSettings.data;
+  // Tab state
+  const [selectedTab, setSelectedTab] = useState<'cart'|'buttons'>('cart');
+  const handleTabChange = (tabIndex: number) => {
+    setSelectedTab(tabIndex === 0 ? 'cart' : 'buttons');
+  };
 
-    const form = useForm({
-        cart_bg_color: cartData.cart_bg_color,
-        cart_text_color: cartData.cart_text_color,
-        cart_price_text_color: cartData.cart_price_text_color,
-        btn_bg_color: cartData.btn_bg_color,
-        btn_text_color: cartData.btn_text_color,
-        btn_onhover_bg_color: cartData.btn_onhover_bg_color,
-        btn_onhover_text_color: cartData.btn_onhover_text_color,
+  // Hover states
+  const [isAddHover, setIsAddHover] = useState(false);
+  const [isBuyHover, setIsBuyHover] = useState(false);
+
+  // Success modal
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // Initial data
+  const {cartSettings} = usePage<CartProps>().props;
+  const d = cartSettings.data;
+
+  // Inertia form
+  const form = useForm({
+    // Cart
+    cart_bg_color:         d.cart_bg_color,
+    cart_text_color:       d.cart_text_color,
+    cart_price_text_color: d.cart_price_text_color,
+    cart_position_from_bottom: d.cart_position_from_bottom,
+    // Add to Cart
+    btn_bg_color:          d.btn_bg_color,
+    btn_text_color:        d.btn_text_color,
+    btn_onhover_bg_color:  d.btn_onhover_bg_color,
+    btn_onhover_text_color:d.btn_onhover_text_color,
+    // Buy Now (defaults)
+    buy_bg_color:          d.buy_bg_color,
+    buy_text_color:        d.buy_text_color,
+    buy_onhover_bg_color:  d.buy_onhover_bg_color,
+    buy_onhover_text_color:d.buy_onhover_text_color,
+  });
+
+  const handleSubmit = useCallback((e: React.FormEvent) => {
+    e.preventDefault();
+    form.post(route('customize'), {
+      preserveScroll: true,
+      onSuccess: () => setModalOpen(true),
     });
+  }, [form]);
 
-    const handleSubmit = React.useCallback((e: React.FormEvent) => {
-        e.preventDefault();
-        form.post(route('customize'), {
-            preserveScroll: true,
-            onSuccess: (response) => {
-                console.log('Server response:', response);
-                setServerResponse(response);
-                setModalOpen(true);
-            },
-        });
-    }, [form]);
+  // Preview bar
+  const previewStyles: React.CSSProperties = {
+    position:       'fixed',
+    bottom:         form.data.cart_position_from_bottom + 'px',
+    left:           0,
+    right:          0,
+    backgroundColor:form.data.cart_bg_color,
+    color:          form.data.cart_text_color,
+    display:        'flex',
+    alignItems:     'center',
+    justifyContent: 'space-between',
+    padding:        '1rem',
+    boxShadow:      '0 1px 6px rgba(0,0,0,0.1)',
+    zIndex:         100,
+  };
 
-    // Inline style object for preview bar
-    const previewStyles: React.CSSProperties = {
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        backgroundColor: form.data.cart_bg_color,
-        color: form.data.cart_text_color,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '1rem',
-        boxShadow: '0 1px 6px rgba(0,0,0,0.1)',
-        fontSize: '16px',
-        zIndex: 1000,
-    };
+  // Add to Cart
+  const addBase: React.CSSProperties = {
+    backgroundColor: form.data.btn_bg_color,
+    color:           form.data.btn_text_color,
+    border:          `1px solid ${form.data.btn_bg_color}`,
+    padding:         '0.8rem 1.5rem',
+    fontWeight:      600,
+    cursor:          'pointer',
+    transition:      'all 0.3s ease',
+  };
+  const addHover: React.CSSProperties = {
+    backgroundColor: form.data.btn_onhover_bg_color,
+    color:           form.data.btn_onhover_text_color,
+  };
 
-    // Base and hover styles for the preview button
-    const baseButtonStyles: React.CSSProperties = {
-        backgroundColor: form.data.btn_bg_color,
-        color: form.data.btn_text_color,
-        border: '1px solid ' + form.data.btn_bg_color,
-        padding: '0.8rem 1.5rem',
-        fontWeight: 600,
-        cursor: 'pointer',
-        transition: 'background-color 0.3s ease, color 0.3s ease',
-    };
-    const hoverButtonStyles: React.CSSProperties = {
-        backgroundColor: form.data.btn_onhover_bg_color,
-        color: form.data.btn_onhover_text_color,
-    };
-    const buttonStyles = isHover
-        ? { ...baseButtonStyles, ...hoverButtonStyles }
-        : baseButtonStyles;
+  // Buy Now
+  const buyBase: React.CSSProperties = {
+    backgroundColor: form.data.buy_bg_color,
+    color:           form.data.buy_text_color,
+    border:          `1px solid ${form.data.buy_bg_color}`,
+    padding:         '0.8rem 1.5rem',
+    fontWeight:      600,
+    cursor:          'pointer',
+    transition:      'all 0.3s ease',
+  };
+  const buyHover: React.CSSProperties = {
+    backgroundColor: form.data.buy_onhover_bg_color,
+    color:           form.data.buy_onhover_text_color,
+  };
 
-    return (
-        <Page title="Customize Settings">
-            <Card>
-                <form onSubmit={handleSubmit}>
-                    <FormLayout>
-                        <FormLayout.Group>
-                            {/* Color pickers */}
-                            <div>
-                                <label htmlFor="cart_bg_color">Cart background</label>
-                                <input
-                                    id="cart_bg_color" name="cart_bg_color" type="color"
-                                    value={form.data.cart_bg_color}
-                                    onChange={e => form.setData('cart_bg_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="cart_text_color">Cart text</label>
-                                <input
-                                    id="cart_text_color" name="cart_text_color" type="color"
-                                    value={form.data.cart_text_color}
-                                    onChange={e => form.setData('cart_text_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="cart_price_text_color">Price text</label>
-                                <input
-                                    id="cart_price_text_color" name="cart_price_text_color" type="color"
-                                    value={form.data.cart_price_text_color}
-                                    onChange={e => form.setData('cart_price_text_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                        </FormLayout.Group>
+  const tabs = [
+    {id: 'cart',    content: 'Cart Appearance'},
+    {id: 'buttons', content: 'Buttons'},
+  ];
 
-                        <FormLayout.Group>
-                            <div>
-                                <label htmlFor="btn_bg_color">Button background</label>
-                                <input
-                                    id="btn_bg_color" name="btn_bg_color" type="color"
-                                    value={form.data.btn_bg_color}
-                                    onChange={e => form.setData('btn_bg_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="btn_text_color">Button text</label>
-                                <input
-                                    id="btn_text_color" name="btn_text_color" type="color"
-                                    value={form.data.btn_text_color}
-                                    onChange={e => form.setData('btn_text_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="btn_onhover_bg_color">Hover background</label>
-                                <input
-                                    id="btn_onhover_bg_color" name="btn_onhover_bg_color" type="color"
-                                    value={form.data.btn_onhover_bg_color}
-                                    onChange={e => form.setData('btn_onhover_bg_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="btn_onhover_text_color">Hover text</label>
-                                <input
-                                    id="btn_onhover_text_color" name="btn_onhover_text_color" type="color"
-                                    value={form.data.btn_onhover_text_color}
-                                    onChange={e => form.setData('btn_onhover_text_color', e.currentTarget.value)}
-                                    style={{ width: '100%', height: '2.5rem', border: 'none' }}
-                                />
-                            </div>
-                        </FormLayout.Group>
+  return (
+    <Page title="Customize Settings">
+      <Tabs
+        tabs={tabs}
+        selected={tabs.findIndex(t => t.id === selectedTab)}
+        onSelect={handleTabChange}
+      />
 
-                        <Button submit variant="primary" loading={form.processing} disabled={form.processing}>
-                            Save Settings
-                        </Button>
-                    </FormLayout>
-                </form>
-            </Card>
+      <form onSubmit={handleSubmit}>
+        {selectedTab === 'cart' && (
+          <Card>
+            <div style={{padding: '1rem'}}>
+              <Text as='h3' variant="headingMd">Cart Appearance</Text>
+              <FormLayout>
+                <FormLayout.Group>
+                  <div>
+                    <label htmlFor="cart_bg_color">Cart background</label>
+                    <input
+                      id="cart_bg_color"
+                      type="color"
+                      value={form.data.cart_bg_color}
+                      onChange={e => form.setData('cart_bg_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="cart_text_color">Cart text</label>
+                    <input
+                      id="cart_text_color"
+                      type="color"
+                      value={form.data.cart_text_color}
+                      onChange={e => form.setData('cart_text_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="cart_price_text_color">Price text</label>
+                    <input
+                      id="cart_price_text_color"
+                      type="color"
+                      value={form.data.cart_price_text_color}
+                      onChange={e => form.setData('cart_price_text_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="car_position_from_bottom">Cart position from bottom</label>
+                    <TextField
+                        label="(in px)"
+                        type="number"
+                        value={String(form.data.cart_position_from_bottom)}
+                        onChange={(value) => {
+                            const num = Math.max(0, Number(value));
+                            form.setData('cart_position_from_bottom', Number(num))
+                        }}
+                        autoComplete="off"
+                    />
+                  </div>
+                </FormLayout.Group>
+              </FormLayout>
+            </div>
+          </Card>
+        )}
 
-            {/* Live Preview */}
-            <>
-                <div style={{ marginBottom: '80px', position: 'relative', minHeight: '120px' }}>
-                    <div style={previewStyles}>
-                        <div>
-                            <strong>Sample Product</strong>
-                            <div>
-                                <span style={{ textDecoration: 'line-through', fontWeight: 600 }}>$120.00</span>
-                                <span style={{ marginRight: '0.5rem', fontWeight: 600, color: form.data.cart_price_text_color }}> $99.00</span>
-                            </div>
-                        </div>
-                        <button
-                            style={buttonStyles}
-                            onMouseEnter={() => setIsHover(true)}
-                            onMouseLeave={() => setIsHover(false)}
-                        >
-                            ADD TO CART
-                        </button>
-                    </div>
-                </div>
-            </>
+        {selectedTab === 'buttons' && (
+          <Card>
+            <div style={{padding: '1rem'}}>
+              <Text as='h3' variant="headingMd">Add to Cart Styles</Text>
+              <FormLayout>
+                <FormLayout.Group>
+                  <div>
+                    <label htmlFor="btn_bg_color">Background</label>
+                    <input
+                      id="btn_bg_color"
+                      type="color"
+                      value={form.data.btn_bg_color}
+                      onChange={e => form.setData('btn_bg_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="btn_text_color">Text</label>
+                    <input
+                      id="btn_text_color"
+                      type="color"
+                      value={form.data.btn_text_color}
+                      onChange={e => form.setData('btn_text_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="btn_onhover_bg_color">Hover background</label>
+                    <input
+                      id="btn_onhover_bg_color"
+                      type="color"
+                      value={form.data.btn_onhover_bg_color}
+                      onChange={e => form.setData('btn_onhover_bg_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="btn_onhover_text_color">Hover text</label>
+                    <input
+                      id="btn_onhover_text_color"
+                      type="color"
+                      value={form.data.btn_onhover_text_color}
+                      onChange={e => form.setData('btn_onhover_text_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                </FormLayout.Group>
+              </FormLayout>
 
-            {/* Success Modal */}
-            <Modal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-                title="Settings Saved"
-                primaryAction={{
-                    content: 'OK',
-                    onAction: () => setModalOpen(false),
-                }}
+              <Divider />
+
+              <div style={{marginTop: '1rem'}}>
+                <Text as='h3' variant="headingMd">Buy Now Styles</Text>
+              </div>
+              <FormLayout>
+                <FormLayout.Group>
+                  <div>
+                    <label htmlFor="buy_bg_color">Background</label>
+                    <input
+                      id="buy_bg_color"
+                      type="color"
+                      value={form.data.buy_bg_color}
+                      onChange={e => form.setData('buy_bg_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="buy_text_color">Text</label>
+                    <input
+                      id="buy_text_color"
+                      type="color"
+                      value={form.data.buy_text_color}
+                      onChange={e => form.setData('buy_text_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="buy_onhover_bg_color">Hover background</label>
+                    <input
+                      id="buy_onhover_bg_color"
+                      type="color"
+                      value={form.data.buy_onhover_bg_color}
+                      onChange={e => form.setData('buy_onhover_bg_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="buy_onhover_text_color">Hover text</label>
+                    <input
+                      id="buy_onhover_text_color"
+                      type="color"
+                      value={form.data.buy_onhover_text_color}
+                      onChange={e => form.setData('buy_onhover_text_color', e.currentTarget.value)}
+                      style={{width:'100%',height:'2.5rem',border:'none'}}
+                    />
+                  </div>
+                </FormLayout.Group>
+              </FormLayout>
+            </div>
+          </Card>
+        )}
+
+        <div style={{marginTop: '1rem'}}>
+          <Button
+            variant="primary"
+            submit
+            loading={form.processing}
+            disabled={form.processing}
+          >
+            Save Settings
+          </Button>
+        </div>
+      </form>
+
+      {/* Spacer */}
+      <div style={{marginBottom: '80px', minHeight: '100px'}} />
+
+      {/* Live Preview */}
+      <div style={previewStyles}>
+        <div>
+          <span style={{fontWeight: 600}}>Sample Product</span>
+          <div>
+            <span style={{textDecoration: 'line-through', fontWeight: 600}}>
+              $120.00
+            </span>
+            <span
+              style={{
+                marginLeft: '0.5rem',
+                fontWeight: 600,
+                color: form.data.cart_price_text_color,
+              }}
             >
-                <Modal.Section>
-                    <TextContainer>
-                        <p>Your settings have been successfully saved.</p>
-                    </TextContainer>
-                </Modal.Section>
-            </Modal>
-        </Page>
-    );
+              $99.00
+            </span>
+          </div>
+        </div>
+
+        <div style={{display: 'flex', gap: '0.5rem'}}>
+          <button
+            style={isAddHover ? {...addBase, ...addHover} : addBase}
+            onMouseEnter={() => setIsAddHover(true)}
+            onMouseLeave={() => setIsAddHover(false)}
+          >
+            ADD TO CART
+          </button>
+
+          <button
+            style={isBuyHover ? {...buyBase, ...buyHover} : buyBase}
+            onMouseEnter={() => setIsBuyHover(true)}
+            onMouseLeave={() => setIsBuyHover(false)}
+          >
+            BUY NOW
+          </button>
+        </div>
+      </div>
+
+      {/* Success Modal */}
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Settings Saved"
+        primaryAction={{
+          content: 'OK',
+          onAction: () => setModalOpen(false),
+        }}
+      >
+        <div style={{padding: '1rem'}}>
+          <Text as='h3'>Your settings have been successfully saved.</Text>
+        </div>
+      </Modal>
+    </Page>
+  );
 }

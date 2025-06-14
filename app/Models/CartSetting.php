@@ -14,6 +14,11 @@ class CartSetting extends Model
         'btn_bg_color',
         'btn_text_color',
         'btn_onhover_bg_color',
-        'btn_onhover_text_color'
+        'btn_onhover_text_color',
+        'buy_bg_color',
+        'buy_text_color',
+        'buy_onhover_bg_color',
+        'buy_onhover_text_color',
+        'cart_position_from_bottom'
     ];
 }

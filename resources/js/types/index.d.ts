@@ -46,10 +46,15 @@ export interface CartSettingsData {
     cart_bg_color: string;
     cart_text_color: string;
     cart_price_text_color: string;
+    cart_position_from_bottom: number;
     btn_bg_color: string;
     btn_text_color: string;
     btn_onhover_bg_color: string;
     btn_onhover_text_color: string;
+    buy_bg_color: string;
+    buy_text_color: string;
+    buy_onhover_bg_color: string;
+    buy_onhover_text_color: string;
 };
 
 export type CartProps = {
