@@ -1,18 +1,18 @@
-name = "Sticky Cart Extension"
+name = "Sticky Add to Cart"
 client_id = "378aa51c41764bc650dacadca3d542bc"
-application_url = "https://shopifycart.insanedev.in/"
+application_url = "https://sticky-cart.insanedev.in/"
 embedded = true
 handle = "sticky-cart-ext"
 
 [access_scopes]
-scopes = "read_products,write_products,write_script_tags"
+scopes = "read_products,write_script_tags,read_orders"
 
 [access.admin]
 direct_api_mode = "online"
 
 [auth]
 redirect_urls = [
-  "https://shopifycart.insanedev.in/authenticate"
+  "https://sticky-cart.insanedev.in/authenticate"
 ]
 
 [webhooks]

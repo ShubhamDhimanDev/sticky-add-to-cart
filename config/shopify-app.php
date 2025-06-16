@@ -193,7 +193,7 @@ return [
     |
     */
 
-    'api_scopes' => env('SHOPIFY_API_SCOPES', 'read_products,write_products,read_themes'),
+    'api_scopes' => env('SHOPIFY_API_SCOPES', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -385,6 +385,28 @@ return [
     */
 
     'webhooks' => [
+        'APP_UNINSTALLED' => [
+            'path'    => '/webhooks',
+            'handler' => \App\Webhooks\AppUninstalledHandler::class,
+        ],
+
+        // GDPR: merchant requests their data
+        'CUSTOMERS_DATA_REQUEST' => [
+            'path'    => '/webhooks',
+            'handler' => \App\Webhooks\CustomerDataRequestHandler::class,
+        ],
+
+        // GDPR: merchant asks you to erase a customer’s data
+        'CUSTOMERS_DATA_ERASURE' => [
+            'path'    => '/webhooks',
+            'handler' => \App\Webhooks\CustomerDataErasureHandler::class,
+        ],
+
+        // GDPR: Shopify instructs you to erase all shop data
+        'SHOP_DATA_ERASURE' => [
+            'path'    => '/webhooks',
+            'handler' => \App\Webhooks\ShopDataErasureHandler::class,
+        ],
         /*
             [
                 'topic' => env('SHOPIFY_WEBHOOK_1_TOPIC', 'ORDERS_CREATE'),
@@ -400,7 +422,8 @@ return [
                 'address' => env('SHOPIFY_WEBHOOK_3_ADDRESS', 'https://some-app.com/webhook/orders-create'),
                 'class' => \App\Shopify\Actions\ExampleAppJob::class
             ],
-        */],
+        */
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -587,5 +610,5 @@ return [
     */
     'frontend_engine' => env('SHOPIFY_FRONTEND_ENGINE', 'BLADE'),
 
-    'iframe_ancestors' => 'shopifycart.insanedev.in',
+    'iframe_ancestors' => 'sticky-cart.insanedev.in',
 ];

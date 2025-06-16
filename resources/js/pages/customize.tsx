@@ -154,7 +154,7 @@ export default function Customize() {
                       style={{width:'100%',height:'2.5rem',border:'none'}}
                     />
                   </div>
-                  <div>
+                  <div style={{ display:'none' }}>
                     <label htmlFor="car_position_from_bottom">Cart position from bottom</label>
                     <TextField
                         label="(in px)"
