@@ -11,7 +11,7 @@ Route::withoutMiddleware([VerifyShopify::class])->controller(TestController::cla
     Route::post('webhooks', WebhookDispatcher::class);
 });
 
-Route::middleware(['verify.shopify'])->controller(CartController::class)->group(function(){
+Route::middleware(['verify.shopify', 'billable'])->controller(CartController::class)->group(function(){
     Route::get('/', 'home')->name('home');
     Route::match(['get', 'post'], '/customize', 'customize')->name('customize');
 });

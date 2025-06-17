@@ -1,4 +1,4 @@
-name = "Sticky Add to Cart"
+name = "QuickStick: Cart & Buy Now"
 client_id = "378aa51c41764bc650dacadca3d542bc"
 application_url = "https://sticky-cart.insanedev.in/"
 embedded = true
