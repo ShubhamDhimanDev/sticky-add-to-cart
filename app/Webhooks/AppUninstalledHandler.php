@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\CartSetting;
 use App\Models\User;
+use Carbon\Carbon;
 
 class AppUninstalledHandler
 {
@@ -65,6 +66,33 @@ class AppUninstalledHandler
                 'shop'   => $domain,
                 'errors' => $errors,
             ]);
+        }
+
+        // 3) Cancel Charges
+        $charge = $shop->charges()
+                ->where('type', 'RECURRING')
+                ->where('status', 'ACTIVE')
+                ->latest()
+                ->first();
+
+
+
+        if ($charge) {
+            // $api = $shop->api();
+
+            try {
+                $charge->status = 'CANCELLED';
+                $charge->cancelled_on = Carbon::now();
+                $charge->save();
+                $charge->delete();
+                // $response = $api->rest('DELETE', "/admin/api/2023-04/recurring_application_charges/{$charge->charge_id}.json");
+                // if ($response['status'] === 200) {
+                // } else {
+                //     Log::error("Charge cancellation failed. For shop : " . $shop->name . " " . $shop->id);
+                // }
+            } catch (\Exception $e) {
+                Log::error("Failed to cancel recurring charge: " . $e->getMessage());
+            }
         }
 
         // 3) optionally drop the shop record

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TestController;
+use App\Http\Middleware\ShopifyCustomBillable;
 use App\Webhooks\WebhookDispatcher;
 use Illuminate\Support\Facades\Route;
 use Osiset\ShopifyApp\Http\Middleware\VerifyShopify;
@@ -11,7 +12,7 @@ Route::withoutMiddleware([VerifyShopify::class])->controller(TestController::cla
     Route::post('webhooks', WebhookDispatcher::class);
 });
 
-Route::middleware(['verify.shopify', 'billable'])->controller(CartController::class)->group(function(){
+Route::middleware(['verify.shopify', ShopifyCustomBillable::class])->controller(CartController::class)->group(function(){
     Route::get('/', 'home')->name('home');
     Route::match(['get', 'post'], '/customize', 'customize')->name('customize');
 });
