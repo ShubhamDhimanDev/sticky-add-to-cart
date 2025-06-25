@@ -13,6 +13,42 @@ class TestController extends Controller
 {
     public function test()
     {
+        $shop = User::where('name', 'dressylove.myshopify.com')->first();
+
+        $charge = $shop->charges()
+        ->where('type', 'RECURRING')
+        ->where('status', 'ACTIVE')
+        ->latest()
+        ->first();
+
+
+        // $shop->update([
+        //     'plan_id' => null
+        // ]);
+        // dd($charge);
+
+        if ($charge) {
+            $api = $shop->api();
+
+            try {
+                $response = $api->rest('DELETE', "/admin/api/2023-04/recurring_application_charges/{$charge->charge_id}.json");
+
+                if ($response['status'] === 200) {
+                    // ✅ Successfully cancelled on Shopify
+                    $charge->status = 'CANCELLED';
+                    $charge->save();
+                    dd('cacnceleted');
+                } else {
+                    // ❌ Not successful
+                    dd("Charge cancellation failed. Status: " . $response->getStatus());
+                    dd("Response body: " . json_encode($response->getDecodedBody()));
+                }
+            } catch (\Exception $e) {
+                dd("Failed to cancel recurring charge: " . $e->getMessage());
+            }
+        }
+        dd('DONE');
+        dd(!$shop->plan, !$shop->isFreemium(), !$shop->isGrandfathered());
         // Plan::create([
         //     'type'         => 'RECURRING',
         //     'name'         => 'Basic Monthly',
