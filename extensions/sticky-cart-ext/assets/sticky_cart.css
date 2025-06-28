@@ -1,4 +1,8 @@
-.productView-stickyCart {
+sticky-add-to-cart {
+    display: none !important;
+}
+
+sticky-buy-button {
     display: none !important;
 }
 
@@ -7,7 +11,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--color-background-1);
+    /* background-color: var(--color-background-1); */
     box-shadow: 0 1px 20px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
@@ -37,7 +41,7 @@
 .sticky-add-to-cart-v1 .product-info .title {
     margin: 0;
     font-size: 1.6rem;
-    color: var(--color-text-1);
+    /* color: var(--color-text-1); */
 }
 
 .sticky-add-to-cart-v1 .product-info .price {
@@ -85,6 +89,7 @@
     font-size: 2.2rem;
     color: #333333;
     cursor: pointer;
+    padding: 0px 0px 0px 0px;
 }
 
 .sticky-add-to-cart-v1 .qty-selector input[type="number"] {
@@ -120,7 +125,23 @@
     cursor: pointer;
     white-space: nowrap;
     transition: color 0.5s ease, background-color 0.5s ease, border 0.5s ease;
+    animation: shake 5s infinite;
 }
+
+@keyframes shake {
+    0%, 18%, 100% {
+        transform: translateZ(0);
+    }
+
+    2%, 6%, 10%, 14% {
+        transform: translate3d(-5px, 0, 0);
+    }
+    4%, 8%, 12%, 16% {
+        transform: translate3d(5px, 0, 0);
+    }
+}
+
+
 
 .sticky-add-to-cart-v1 .add-to-cart-form {
     margin-right: 1rem;
@@ -129,7 +150,7 @@
 /* ─── Mobile ───────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
     .sticky-add-to-cart-v1 {
-        bottom: 64px;
+        /* bottom: 64px; */
     }
 }
 @media (max-width: 550px) {
