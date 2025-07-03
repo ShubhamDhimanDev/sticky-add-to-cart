@@ -10,21 +10,17 @@ use Inertia\Inertia;
 
 class CartController extends Controller
 {
-    public function home(Request $request)
-    {
-        // return view('home');
-        $cartSettings = CartSetting::where("user_id", Auth::user()->id)->first();
-        return Inertia::render('customize', [
-            'cartSettings' =>  new CartSettingResource($cartSettings)
-        ]);
-    }
-
     public function customize(Request $request)
     {
         if ($request->isMethod('GET')) {
             $cartSettings = CartSetting::where("user_id", Auth::user()->id)->first();
+            $shopDomain = auth()->user()->name;
+            $extensionId = config('shopify-app.sticky_cart_ext_id');
+            $extensionLink = "https://$shopDomain/admin/themes/current/editor?template=product&addAppBlockId=$extensionId/sticky_cat&target=newAppsSection";
+
             return Inertia::render('customize', [
-                'cartSettings' =>  new CartSettingResource($cartSettings)
+                'cartSettings' =>  new CartSettingResource($cartSettings),
+                'addExtensionLink' => $extensionLink
             ]);
         }
 

@@ -1,28 +1,29 @@
-name = "QuickStick: Cart & Buy Now"
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
 client_id = "378aa51c41764bc650dacadca3d542bc"
+name = "QuickStick: Cart & Buy Now"
+handle = "sticky-cart-ext"
 application_url = "https://sticky-cart.insanedev.in/"
 embedded = true
-handle = "sticky-cart-ext"
-
-[access_scopes]
-scopes = "read_products,write_script_tags,read_orders"
-
-[access.admin]
-direct_api_mode = "online"
-
-[auth]
-redirect_urls = [
-  "https://sticky-cart.insanedev.in/authenticate"
-]
-
-[webhooks]
-api_version = "2024-01"
-
-[[webhooks.subscriptions]]
-topics = [ "app/uninstalled" ]
-compliance_topics = [ "customers/redact", "customers/data_request", "shop/redact" ]
-uri = "/webhooks"
 
 [build]
 automatically_update_urls_on_dev = false
 include_config_on_deploy = true
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks"
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+
+[access.admin]
+direct_api_mode = "online"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_orders,read_products,write_script_tags"
+
+[auth]
+redirect_urls = [ "https://sticky-cart.insanedev.in/authenticate" ]

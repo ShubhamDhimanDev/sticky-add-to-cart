@@ -28,7 +28,8 @@ export default function Customize() {
   const [modalOpen, setModalOpen] = useState(false);
 
   // Initial data
-  const {cartSettings} = usePage<CartProps>().props;
+  const {cartSettings, addExtensionLink} = usePage<CartProps>().props;
+
   const d = cartSettings.data;
 
   // Inertia form
@@ -52,7 +53,7 @@ export default function Customize() {
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    form.post(route('customize'), {
+    form.post(route('home'), {
       preserveScroll: true,
       onSuccess: () => setModalOpen(true),
     });
@@ -109,8 +110,17 @@ export default function Customize() {
     {id: 'buttons', content: 'Buttons'},
   ];
 
+  const handleAddExtensionClick = () => {
+    window.open(addExtensionLink);
+  }
+
   return (
-    <Page title="Customize Settings">
+    <Page title="Customize Settings"
+      primaryAction={{
+        content: 'Add QuickStick to product page',
+        destructive: true, // Makes it red
+        onAction: handleAddExtensionClick,
+      }}>
       <Tabs
         tabs={tabs}
         selected={tabs.findIndex(t => t.id === selectedTab)}

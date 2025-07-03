@@ -10,11 +10,12 @@ use Osiset\ShopifyApp\Http\Middleware\VerifyShopify;
 Route::withoutMiddleware([VerifyShopify::class])->controller(TestController::class)->group(function(){
     Route::get('/test', 'test');
     Route::post('webhooks', WebhookDispatcher::class);
+    Route::get('/', 'home');
 });
 
 Route::middleware(['verify.shopify', ShopifyCustomBillable::class])->controller(CartController::class)->group(function(){
-    Route::get('/', 'home')->name('home');
-    Route::match(['get', 'post'], '/customize', 'customize')->name('customize');
+    // Route::get('/', 'home');
+    Route::match(['get', 'post'], '/customize', 'customize')->name('home');
 });
 
 // Route::middleware(['verify.shopify'])->get('/', function () {

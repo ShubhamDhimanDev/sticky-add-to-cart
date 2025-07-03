@@ -61,4 +61,5 @@ export type CartProps = {
     cartSettings: {
         data: CartSettingsData;
     };
+    addExtensionLink: string;
 };

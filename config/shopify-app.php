@@ -611,4 +611,6 @@ return [
     'frontend_engine' => env('SHOPIFY_FRONTEND_ENGINE', 'BLADE'),
 
     'iframe_ancestors' => 'sticky-cart.insanedev.in',
+
+    'sticky_cart_ext_id' => env('SHOPIFY_STICKY_CART_EXT_ID', '')
 ];

@@ -44,48 +44,54 @@ document.addEventListener('DOMContentLoaded', function () {
     const stickyBar = document.querySelector('.sticky-add-to-cart-v1');
     if (!stickyBar) return;
 
-    const originalAddToCart = document.querySelector('form[action="/cart/add"] button[type="submit"]');
+    if (window.Shopify && Shopify.designMode) {
+        stickyBar.classList.add('visible');
+    } else {
 
-    if (!originalAddToCart) {
-        console.warn('Sticky bar: could not locate original Add To Cart button. Adjust the selector.');
-        return;
+        const originalAddToCart = document.querySelector('form[action="/cart/add"] button[type="submit"]');
+
+        if (!originalAddToCart) {
+            console.warn('Sticky bar: could not locate original Add To Cart button. Adjust the selector.');
+            return;
+        }
+
+        let buttonInView = true;
+        let atBottomOfPage = false;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    buttonInView = entry.isIntersecting;
+                    updateStickyBarVisibility();
+                });
+            },
+            {
+                root: null,
+                threshold: 0,
+            }
+        );
+        observer.observe(originalAddToCart);
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY || window.pageYOffset;
+            const viewportHeight = window.innerHeight;
+            const fullHeight = document.documentElement.scrollHeight;
+
+            if (scrollY + viewportHeight >= fullHeight - 1) {
+                atBottomOfPage = true;
+            } else {
+                atBottomOfPage = false;
+            }
+            updateStickyBarVisibility();
+        });
+
+        function updateStickyBarVisibility() {
+            if (!buttonInView && !atBottomOfPage) {
+                stickyBar.classList.add('visible');
+            } else {
+                stickyBar.classList.remove('visible');
+            }
+        }
     }
 
-    let buttonInView = true;
-    let atBottomOfPage = false;
-
-    const observer = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                buttonInView = entry.isIntersecting;
-                updateStickyBarVisibility();
-            });
-        },
-        {
-            root: null,
-            threshold: 0,
-        }
-    );
-    observer.observe(originalAddToCart);
-
-    window.addEventListener('scroll', () => {
-        const scrollY = window.scrollY || window.pageYOffset;
-        const viewportHeight = window.innerHeight;
-        const fullHeight = document.documentElement.scrollHeight;
-
-        if (scrollY + viewportHeight >= fullHeight - 1) {
-            atBottomOfPage = true;
-        } else {
-            atBottomOfPage = false;
-        }
-        updateStickyBarVisibility();
-    });
-
-    function updateStickyBarVisibility() {
-        if (!buttonInView && !atBottomOfPage) {
-            stickyBar.classList.add('visible');
-        } else {
-            stickyBar.classList.remove('visible');
-        }
-    }
 });
