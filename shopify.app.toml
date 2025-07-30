@@ -3,7 +3,7 @@
 client_id = "378aa51c41764bc650dacadca3d542bc"
 name = "QuickStick: Cart & Buy Now"
 handle = "sticky-cart-ext"
-application_url = "https://sticky-cart.insanedev.in/"
+application_url = "https://sticky-cart.insanedev.in/customize"
 embedded = true
 
 [build]

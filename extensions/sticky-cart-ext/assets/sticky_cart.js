@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
             val = 1;
         }
         qtyInput.value = val;
-        hiddenQty.forEach(qty=>{
+        hiddenQty.forEach(qty => {
             qty.value = val;
         });
     }
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let current = parseInt(qtyInput.value, 10) || 1;
         if (current > 1) {
             qtyInput.value = current - 1;
-            hiddenQty.forEach(qty=>{
+            hiddenQty.forEach(qty => {
                 qty.value = current - 1;
             });
         }
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         let current = parseInt(qtyInput.value, 10) || 1;
         qtyInput.value = current + 1;
-        hiddenQty.forEach(qty=>{
+        hiddenQty.forEach(qty => {
             qty.value = current + 1;
         });
     });
@@ -93,5 +93,45 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
+
+    function setLoading(btn, isLoading) {
+        if (isLoading) {
+            btn.querySelector('span').classList.remove('hidden');
+        } else {
+            btn.querySelector('span').classList.add('hidden');
+        }
+    }
+
+    function clickButtonByKeyword(formSelector, keyword) {
+        const re = new RegExp(`\\b${keyword}\\b`, 'i');
+        const buttons = Array.from(document.querySelectorAll(`${formSelector} button`));
+        const btn = buttons.find(b => {
+            const text = b.textContent.replace(/\s+/g, ' ').trim();
+            return re.test(text);
+        });
+
+        if (btn) {
+            btn.click();
+        } else if (keyword === 'buy') {
+            const frame = document.querySelector('iframe[title="PayPal"]');
+            if (!frame) {
+                return console.warn('PayPal iframe not found');
+            }
+        } else {
+            console.warn(`No button containing the word "${keyword}" was found in ${formSelector}`);
+        }
+    }
+
+    document.getElementById('buy__now').addEventListener('click', (e) => {
+        clickButtonByKeyword('form[action="/cart/add"]', 'buy');
+    });
+
+    document.getElementById('cart__now').addEventListener('click', (e) => {
+        setLoading(e.target, true);
+        clickButtonByKeyword('form[action="/cart/add"]', 'cart');
+        setTimeout(() => {
+            setLoading(document.getElementById('cart__now'), false);
+        }, 3000);
+    });
 
 });

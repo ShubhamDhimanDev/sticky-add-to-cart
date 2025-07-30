@@ -88,7 +88,7 @@
         </div>
 
         <!-- ADD TO CART FORM -->
-        <form action='/cart/add' method='post' class="add-to-cart-form" enctype='multipart/form-data'>
+        {% comment %} <form action='/cart/add' method='post' class="add-to-cart-form" enctype='multipart/form-data'>
             <input type='hidden' name='id' value='{{ variant.id }}'>
             <input type='hidden' name='quantity' class='qty-input-hidden' value='1'>
             <button type='submit' class='add-to-cart-btn'>ADD TO CART</button>
@@ -99,7 +99,15 @@
             <input type='hidden' name='quantity' class='qty-input-hidden' value='1'>
             <input type="hidden" name="return_to" value="/checkout">
             <button type='submit' class='buy-now-btn'>BUY NOW</button>
-        </form>
+        </form> {% endcomment %}
+
+        <button type="button" class="add-to-cart-btn" id="cart__now">
+            ADD TO CART <span class="loader hidden"></span>
+        </button>
+        <button type="button" class="buy-now-btn" id="buy__now">
+            BUY NOW <span class="loader hidden"></span>
+        </button>
+
     </div>
 </div>
 
