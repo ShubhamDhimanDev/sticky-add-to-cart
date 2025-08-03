@@ -144,4 +144,20 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('sticky__quantity').value = e.target.value;
     });
 
+    console.log(document.referrer);
+
+    fetch(`/apps/sticky-cart-proxy?ref=${encodeURIComponent(document.referrer)}`)
+    .then(response => {
+        console.log(response)
+        if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text(); // or response.json() if it's JSON
+    })
+    .then(data => {
+        console.log('API Response:', data);
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+    });
 });
