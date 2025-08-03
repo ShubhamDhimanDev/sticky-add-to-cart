@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let current = parseInt(qtyInput.value, 10) || 1;
         if (current > 1) {
             qtyInput.value = current - 1;
+            document.querySelector('input[name="quantity"]').value = current - 1;
             hiddenQty.forEach(qty => {
                 qty.value = current - 1;
             });
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         let current = parseInt(qtyInput.value, 10) || 1;
         qtyInput.value = current + 1;
+        document.querySelector('input[name="quantity"]').value = current + 1;
         hiddenQty.forEach(qty => {
             qty.value = current + 1;
         });
@@ -132,6 +134,14 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => {
             setLoading(document.getElementById('cart__now'), false);
         }, 3000);
+    });
+
+    document.getElementById('sticky__quantity').addEventListener('change', (e)=>{
+        document.querySelector('input[name="quantity"]').value = e.target.value;
+    });
+
+    document.querySelector('input[name="quantity"]').addEventListener('change', (e)=>{
+        document.getElementById('sticky__quantity').value = e.target.value;
     });
 
 });

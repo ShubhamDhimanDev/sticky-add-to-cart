@@ -184,6 +184,11 @@ sticky-buy-button {
     margin-right: 1rem;
 }
 
+#sticky__quantity {
+    padding:0px!important;
+    text-align: center;
+}
+
 /* ─── Mobile ───────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
     .sticky-add-to-cart-v1 {
