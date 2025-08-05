@@ -154,7 +154,7 @@ sticky-buy-button {
   margin-left: 0.5em;
 }
 
-.hidden {
+.sticky__cart__hidden {
   display: none;
 }
 

@@ -98,9 +98,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function setLoading(btn, isLoading) {
         if (isLoading) {
-            btn.querySelector('span').classList.remove('hidden');
+            btn.querySelector('span').classList.remove('sticky__cart__hidden');
         } else {
-            btn.querySelector('span').classList.add('hidden');
+            btn.querySelector('span').classList.add('sticky__cart__hidden');
         }
     }
 

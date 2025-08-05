@@ -29,6 +29,6 @@ scopes = "read_orders,read_products,write_script_tags,write_app_proxy"
 redirect_urls = [ "https://sticky-cart.insanedev.in/authenticate" ]
 
 [app_proxy]
-prefix  = "apps"
-subpath = "sticky-cart-proxy"
 url     = "https://sticky-cart.insanedev.in/proxy"
+subpath = "sticky-cart-proxy"
+prefix  = "apps"
