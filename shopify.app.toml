@@ -8,7 +8,6 @@ embedded = true
 
 [build]
 automatically_update_urls_on_dev = false
-include_config_on_deploy = true
 
 [webhooks]
 api_version = "2025-04"
@@ -29,6 +28,6 @@ scopes = "read_orders,read_products,write_script_tags,write_app_proxy"
 redirect_urls = [ "https://sticky-cart.insanedev.in/authenticate" ]
 
 [app_proxy]
-url     = "https://sticky-cart.insanedev.in/proxy"
+url     = "https://sticky-cart.insanedev.in/proxy/"
 subpath = "sticky-cart-proxy"
 prefix  = "apps"

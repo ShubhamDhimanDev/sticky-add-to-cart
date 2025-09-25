@@ -15,7 +15,7 @@ use Osiset\ShopifyApp\Http\Middleware\VerifyShopify;
 Route::withoutMiddleware([VerifyShopify::class])->group(function () {
     Route::controller(TestController::class)->group(function () {
         Route::get('/test', 'test');
-        Route::post('webhooks', WebhookDispatcher::class);
+        Route::post('/customize/webhooks', WebhookDispatcher::class);
     });
 
     Route::controller(HomeController::class)->group(function () {
