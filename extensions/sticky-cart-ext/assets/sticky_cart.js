@@ -98,29 +98,45 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function setLoading(btn, isLoading) {
         if (isLoading) {
-            btn.querySelector('span').classList.remove('hidden');
+            btn.querySelector('span').classList.remove('sticky__cart__hidden');
         } else {
-            btn.querySelector('span').classList.add('hidden');
+            btn.querySelector('span').classList.add('sticky__cart__hidden');
         }
     }
 
     function clickButtonByKeyword(formSelector, keyword) {
         const re = new RegExp(`\\b${keyword}\\b`, 'i');
         const buttons = Array.from(document.querySelectorAll(`${formSelector} button`));
-        const btn = buttons.find(b => {
+
+        let btn = null;
+
+        for (const b of buttons) {
             const text = b.textContent.replace(/\s+/g, ' ').trim();
-            return re.test(text);
-        });
+            if (re.test(text)) {
+                const style = window.getComputedStyle(b);
+                const isVisible =
+                    style.display !== "none" &&
+                    style.visibility !== "hidden" &&
+                    style.opacity !== "0" &&
+                    b.offsetParent !== null;
+
+                if (isVisible) {
+                    btn = b;
+                    break; // stop at the first visible button
+                }
+            }
+        }
 
         if (btn) {
+            console.log("Clicking visible button:", btn);
             btn.click();
-        } else if (keyword === 'buy') {
+        } else if (keyword.toLowerCase() === 'buy') {
             const frame = document.querySelector('iframe[title="PayPal"]');
             if (!frame) {
                 return console.warn('PayPal iframe not found');
             }
         } else {
-            console.warn(`No button containing the word "${keyword}" was found in ${formSelector}`);
+            console.warn(`No visible button containing the word "${keyword}" was found in ${formSelector}`);
         }
     }
 
@@ -143,5 +159,19 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('input[name="quantity"]').addEventListener('change', (e)=>{
         document.getElementById('sticky__quantity').value = e.target.value;
     });
+
+    // console.log(document.referrer);
+
+    // const ref = encodeURIComponent(document.referrer);
+    // fetch(`/apps/sticky-cart-proxy/?ref=${ref}`, {
+    //     method: 'GET',
+    //     headers: { 'Accept': 'application/json' }
+    // })
+    // .then(res => {
+    //     if (!res.ok) throw new Error(res.status);
+    //     return res.json();
+    // })
+    // .then(data => console.log('proxy data', data))
+    // .catch(err => console.error(err));
 
 });

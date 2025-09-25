@@ -19,6 +19,7 @@ class TestController extends Controller
 {
     public function test()
     {
+        Log::info("API Successfull");
         dd('done');
 
         $shop = User::where('name', 'dressylove.myshopify.com')->first();
